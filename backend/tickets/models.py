@@ -1,8 +1,10 @@
 from django.db import models
 from users.models import CustomUser
 from tenants.models import Tenant
+from .mixins import SequenceNumberMixin
+from django.core.exceptions import ValidationError
 
-class Ticket(models.Model):
+class Ticket(models.Model, SequenceNumberMixin):
     STATUS_CHOICES = [('pending','Pending'),
                       ('started','Started'),
                       ('approved','Approved'),
@@ -26,17 +28,38 @@ class Ticket(models.Model):
     
     def __str__(self):
         return str(self.tenant) + " # " + str(self.number)
+    
+    def save(self, *args, **kwargs):
+        if not self.number:
+            self.number = self.generate_sequence_number('tenant')
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.tenant not in self.created_by.tenants.all():
+            raise ValidationError("User not allowed to create ticket for this tenant.")
+        if self.category and self.category.tenant != self.tenant:
+            raise ValidationError("Category not allowed for this tenant.")
+        return super().clean()    
+    
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ['tenant', 'number']
+    
 
 class Category(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='created_categories')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.name
+        return str(self.tenant) + " - " + self.name
     
+    class Meta:
+        verbose_name_plural = 'categories'
+        unique_together = ['tenant', 'name']
+        
 class TicketComment(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField()
@@ -45,6 +68,9 @@ class TicketComment(models.Model):
     
     def __str__(self):
         return f'{self.ticket.number} - {self.created_by.username}'
+    
+    class Meta:
+        ordering = ['-created_at']
     
 class TicketAttachment(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='attachments')
@@ -63,7 +89,7 @@ class TicketStatusChange(models.Model):
     
     def __str__(self):
         return f'{self.ticket.number} - {self.status}'
-
+    
 class TaskType(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
@@ -73,7 +99,7 @@ class TaskType(models.Model):
     def __str__(self):
         return self.name
     
-class TicketTask(models.Model):
+class TicketTask(models.Model, SequenceNumberMixin):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='tasks')
     number = models.IntegerField(editable=False)
     task = models.TextField()
@@ -83,6 +109,24 @@ class TicketTask(models.Model):
     
     def __str__(self):
         return f'{self.ticket} - {self.number}'
+    
+    def save(self, *args, **kwargs):
+        if not self.number:
+            self.number = self.generate_sequence_number('ticket')
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        print(self.ticket.tenant)
+        print(self.ticket.created_by.tenants.all())
+        if self.ticket.tenant not in self.created_by.tenants.all():
+            raise ValidationError("User not allowed to create tasks for this tenant.")
+        if self.type and self.type.tenant != self.ticket.tenant:
+            raise ValidationError("Ticket Type not allowed for this tenant.")
+        return super().clean()   
+    
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ['ticket', 'number']
 
 class TicketTaskComment(models.Model):
     task = models.ForeignKey(TicketTask, on_delete=models.CASCADE, related_name='comments')
