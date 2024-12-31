@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from rest_framework.authtoken.models import Token
 from tenants.models import Tenant
 
 class CustomUser(AbstractUser):
@@ -25,3 +26,6 @@ class CustomUser(AbstractUser):
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
     )
+
+class TenantToken(Token):
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='tokens')
