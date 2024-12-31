@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from rest_framework.authtoken.admin import TokenAdmin
+from .models import CustomUser, TenantToken
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -20,4 +21,8 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('username', 'first_name', 'last_name', 'email')
     ordering = ('username',)
 
+class CustomTokenAdmin(TokenAdmin):
+    list_display = ('key', 'user', 'created', 'tenant')
+
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(TenantToken, CustomTokenAdmin)
