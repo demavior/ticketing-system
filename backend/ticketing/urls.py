@@ -20,5 +20,7 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('tenants/', include('tenants.urls')),
     path('users/', include('users.urls')),
+    path('tickets/', include('tickets.urls')),
 ]
