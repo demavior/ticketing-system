@@ -6,19 +6,20 @@ from django.core.exceptions import ValidationError
 
 class Ticket(models.Model, SequenceNumberMixin):
     STATUS_CHOICES = [('pending','Pending'),
-                      ('started','Started'),
-                      ('approved','Approved'),
-                      ('progress','In Progress'),
+                      ('open','Open'),
+                      ('assigned','Assigned'),
                       ('resolved','Resolved'),
                       ('closed','Closed'),
-                      ('cancelled', 'Cancelled'),
-                      ('rejected','Rejected')]
+                      ('cancelled', 'Cancelled')]
     tenant = models.ForeignKey(Tenant, on_delete=models.PROTECT)
     number = models.IntegerField(editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    resolution = models.TextField(null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.RESTRICT, related_name='tickets', null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    priority = models.IntegerField(null=True, blank=True,choices=[(1,'Low'), (2,'Medium'), (3,'High'), (4,'Critical')])
+    due_date = models.DateField(null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='created_tickets')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='updated_tickets', null=True, blank=True)
@@ -60,6 +61,7 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
         unique_together = ['tenant', 'name']
         
+DEFAULT_CATEGORIES = ['Inquiry', 'Update Request', 'Feature Request', 'Problem', 'Incident']
 class TicketComment(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField()
@@ -74,6 +76,7 @@ class TicketComment(models.Model):
     
 class TicketAttachment(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='attachments')
+    name = models.CharField(max_length=255)
     attachment = models.FileField(upload_to='attachments/')
     created_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='ticket_attachments')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -88,7 +91,7 @@ class TicketStatusChange(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f'{self.ticket.number} - {self.status}'
+        return f'{self.ticket} - {self.status}'
     
 class TaskType(models.Model):
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
@@ -97,7 +100,12 @@ class TaskType(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.name
+        return f'{self.tenant} - {self.name}'
+    class Meta:
+        unique_together = ['tenant', 'name']
+
+DEFAULT_TASK_TYPES = ['Analysis/Design','Development', 'Testing', 'Deployment', 'Documentation']
+
     
 class TicketTask(models.Model, SequenceNumberMixin):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='tasks')
@@ -135,7 +143,7 @@ class TicketTaskComment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f'{self.task.ticket.number} - {self.task.number} - {self.created_by.username}'
+        return f'{self.task} - {self.created_by.username}'
     
 class TicketTaskAttachment(models.Model):
     task = models.ForeignKey(TicketTask, on_delete=models.CASCADE, related_name='attachments')
@@ -144,4 +152,4 @@ class TicketTaskAttachment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f'{self.task.ticket.number} - {self.task.number} - {self.created_by.username}'
+        return f'{self.task} - {self.created_by.username}'
