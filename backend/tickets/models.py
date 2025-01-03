@@ -20,12 +20,12 @@ class Ticket(models.Model, SequenceNumberMixin):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     priority = models.IntegerField(null=True, blank=True,choices=[(1,'Low'), (2,'Medium'), (3,'High'), (4,'Critical')])
     due_date = models.DateField(null=True, blank=True)
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='assigned_tickets', null=True, blank=True)
+    approved_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='approved_tickets', null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='created_tickets')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='updated_tickets', null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
-    assigned_to = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='assigned_tickets', null=True, blank=True)
-    approved_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='approved_tickets', null=True, blank=True)
     
     def __str__(self):
         return str(self.tenant) + " # " + str(self.number)
@@ -110,8 +110,12 @@ DEFAULT_TASK_TYPES = ['Analysis/Design','Development', 'Testing', 'Deployment', 
 class TicketTask(models.Model, SequenceNumberMixin):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='tasks')
     number = models.IntegerField(editable=False)
-    task = models.TextField()
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='assigned_tasks', null=True, blank=True)
     type = models.ForeignKey(TaskType, on_delete=models.RESTRICT, related_name='tasks', null=True, blank=True)
+    task = models.TextField()
+    dateTime = models.DateTimeField(null=True, blank=True)
+    hours_worked = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    minutes_worked = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='ticket_tasks')
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -124,8 +128,6 @@ class TicketTask(models.Model, SequenceNumberMixin):
         super().save(*args, **kwargs)
 
     def clean(self):
-        print(self.ticket.tenant)
-        print(self.ticket.created_by.tenants.all())
         if self.ticket.tenant not in self.created_by.tenants.all():
             raise ValidationError("User not allowed to create tasks for this tenant.")
         if self.type and self.type.tenant != self.ticket.tenant:
