@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Login.css';
 
 function Login() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [organization, setOrganization] = useState('');
@@ -9,6 +11,7 @@ function Login() {
     const handleSubmit = (e) => {
       e.preventDefault();
       // Handle login logic here
+      navigate("/user");
       console.log({ username, password, organization });
     };
   

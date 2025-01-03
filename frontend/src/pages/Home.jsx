@@ -10,7 +10,7 @@ function Home() {
       {/* <div className="home-links">
         <a href="/login" className="home-link">Login</a>
         <a href="/customer" className="home-link">Customer Portal</a>
-        <a href="/agent" className="home-link">Agent Portal</a>
+        <a href="/user" className="home-link">User Portal</a>
       </div> */}
     </div>
   );
