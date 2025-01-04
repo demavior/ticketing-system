@@ -40,21 +40,24 @@ class RegistrationView(APIView):
     
 class LoginView(CustomAuthToken):
     def post(self, request, *args, **kwargs):
-        response = super(LoginView, self).post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        user = token.user
-        tenant = Tenant.objects.get(id=request.data['tenant_id'])
-        # Verify user tenant
-        if tenant not in user.tenants.all():
-            return Response({"non_field_errors": ["Unable to login to this tenant"]}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email,
-            'role': user.role,
-            'tenant_id': tenant.id,
-            'tenant': tenant.name
-        })
+        try:
+            response = super(LoginView, self).post(request, *args, **kwargs)
+            token = Token.objects.get(key=response.data['token'])
+            user = token.user
+            tenant = Tenant.objects.get(id=request.data['tenant_id'])
+            # Verify user tenant
+            if tenant not in user.tenants.all():
+                return Response({"non_field_errors": ["Unable to login to this tenant"]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                'token': token.key,
+                'user_id': user.pk,
+                'email': user.email,
+                'role': user.role,
+                'tenant_id': tenant.id,
+                'tenant': tenant.name
+            })
+        except Token.DoesNotExist:
+            return Response({"non_field_errors": ["Unable to login with provided tenant"]}, status=status.HTTP_400_BAD_REQUEST)
     
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
