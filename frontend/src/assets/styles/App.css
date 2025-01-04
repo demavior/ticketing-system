@@ -47,50 +47,6 @@
   background-color: var(--secondary-color);
 }
 
-/* Header */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: var(--secondary-color);
-  color: white;
-  position: sticky;
-  top: 0;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  height: 80px;
-  margin: 0rem 1rem;
-}
-
-.header nav {
-  display: flex;
-  align-items: center;
-  margin: 0 1rem;
-}
-
-.header nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-around;
-  flex-grow: 1;
-}
-
-.header nav ul li {
-  margin: 0 1rem;
-}
-
-.header nav ul li a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
 /* Footer */
 .footer {
   background-color: var(--secondary-color);
