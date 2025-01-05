@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .models import CustomUser, TenantToken, Tenant
-from .serializers import UserRegistrationSerializer, UserDetailSerializer, TenantUserSerializer
+from .serializers import UserRegistrationSerializer, UserDetailSerializer, TenantUsersSerializer, UserTenantsSerializer
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -83,7 +83,7 @@ class UserDetailView(APIView):
         serializer = UserDetailSerializer(user)
         return Response(serializer.data)
         
-    def put(self, request, user_id=None):
+    def patch(self, request, user_id=None):
         if user_id:
             try:
                 user = CustomUser.objects.get(id=user_id)
@@ -102,9 +102,20 @@ class UserListView(APIView):
         # Get all users by tenant
         if request.tenant:
             users = CustomUser.objects.filter(tenants=request.tenant)
-            serializer = TenantUserSerializer(users, many=True)
+            serializer = TenantUsersSerializer(users, many=True)
             return Response(serializer.data)
         # Get all users
         users = CustomUser.objects.all()
-        serializer = TenantUserSerializer(users, many=True)
+        serializer = TenantUsersSerializer(users, many=True)
         return Response(serializer.data)
+    
+class UserTenantsView(APIView):
+    def get(self, request, username):
+        try:
+            # Ge all Tenants by user id
+            user = CustomUser.objects.get(username=username)
+            tenants = user.tenants.all()
+            serializer = UserTenantsSerializer(tenants, many=True)
+            return Response(serializer.data)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
