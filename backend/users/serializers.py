@@ -21,7 +21,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role']
 
-class TenantUserSerializer(serializers.ModelSerializer):
+class TenantUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'role']
+
+class UserTenantsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tenant
+        fields = ['id', 'name']
