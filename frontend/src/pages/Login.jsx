@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/styles/Login.css';
+import UserAPI from '../api/UserApi.js';
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [organization, setOrganization] = useState('');
+  const [tenants, setTenants] = useState([]);
+  const [tenant, setTenant] = useState('');
+  const [error, setError] = useState('');
+  const [tenantSelectionVisible, setTenantSelectionVisible] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    navigate("/user");
-    console.log({ username, password, organization });
+    // Call the login API
+    const data = { username, password, tenant_id: tenant };
+    const result = await UserAPI.login(data);
+    // Redirect to user page if login is successful
+    if (result.success) {
+      navigate('/user');
+    } else if (result.message === 'tenants') {
+      setTenants(result.tenants);
+      setTenantSelectionVisible(true);
+      setError('');
+    } else {
+      setError(result.message);
+    }
+  };
+
+  const handleTenantSelection = (e) => {
+    if (tenant) {
+      handleSubmit(e)
+    }
   };
 
   return (
@@ -36,22 +56,34 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
-        <label htmlFor="organization">Organization</label>
-        <select
-          id="organization"
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-          required
-        >
-          <option value="">Select your organization</option>
-          <option value="org1">Organization 1</option>
-          <option value="org2">Organization 2</option>
-          <option value="org3">Organization 3</option>
-        </select>
-
+        {error && <p className="error-message">{error}</p>}
         <button type="submit" className="login-button">Login</button>
       </form>
+      {tenantSelectionVisible && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3>Select Tenant</h3>
+            <select
+              id="tenant"
+              value={tenant}
+              onChange={(e) => setTenant(e.target.value)}
+              required
+            >
+              <option value="">Select Tenant</option>
+              {tenants.map((tenant) => (
+                <option key={tenant.id} value={tenant.id}>
+                  {tenant.name}
+                </option>
+              ))}
+            </select>
+            <div className="modal-buttons">
+              <button className="cancel-button" onClick={() => {setTenantSelectionVisible(false)
+                setTenant()}}>Cancel</button>
+              <button onClick={handleTenantSelection}>Continue</button>
+            </div>
+          </div>
+        </div>
+    )}
     </div>
   );
 };

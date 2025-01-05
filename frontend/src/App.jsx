@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import UserHome from './pages/UserHome';
+import UserProfile from './pages/UserProfile';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user" element={<UserHome />} />
+        <Route path="/user/profile" element={<UserProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

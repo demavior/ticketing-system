@@ -7,7 +7,6 @@ import NavBar from './NavBar';
 function Header() {
   // Handle Header based on user page
   const location = useLocation().pathname;
-  console.log(location);
   const user = ['/', '/login', '/contact',].includes(location) ? false : true;
   // Handle toggleNav
   const [isNavOpen, setIsNavOpen] = useState(true);
@@ -16,10 +15,10 @@ function Header() {
   };
   // Return Header based on page
   if (user) {
-    return <div>
+    return <>
       <UserHeader toggleNav={toggleNav} />
       <NavBar isNavOpen={isNavOpen} />
-    </div>
+    </>
   }
   else {
     return (
