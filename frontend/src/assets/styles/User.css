@@ -1,17 +1,13 @@
-.user-home-container {
-    display: flex;
-  }
-  
-  .main-content {
-    flex-grow: 1;
-    padding: 2rem;
-    transition: margin-left 0.3s ease;
-  }
-  
-  .main-content.nav-open {
-    margin-left: 200px;
-  }
-  
-  .main-content.nav-closed {
-    margin-left: 0;
-  }
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+.open + .main-content {
+  margin-left: 200px;
+}
+
+.collapsed + .main-content {
+  margin-left: 54px;
+}

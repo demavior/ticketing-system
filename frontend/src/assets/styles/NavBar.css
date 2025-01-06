@@ -1,38 +1,72 @@
 .nav-bar {
-    position: fixed;
-    height: 100%;
-    width: 200px;
-    background-color: var(--secondary-color);
-    color: white;
-    padding-top: 60px;
-    transition: transform 0.3s ease;
-    border-right: 1px solid grey;
-  }
-  
-  .nav-bar.closed {
-    transform: translateX(-100%);
-  }
-  
-  .nav-bar.open {
-    transform: translateX(0);
-  }
-  
-  .nav-bar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .nav-bar ul li {
-    margin: 1rem 0;
-  }
-  
-  .nav-bar ul li a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    display: block;
-  }
-  
-  .nav-bar ul li a:hover {
-    background-color: #003399;
-  }
+  position: fixed;
+  height: 100%;
+  width: 200px;
+  background-color: var(--secondary-color);
+  color: white;
+  padding-top: 30px;
+  transition: transform 0.3s ease, width 0.3s ease;
+  border-right: 1px solid grey;
+}
+
+.nav-bar.collapsed {
+  width: 54px;
+}
+
+.nav-bar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-bar ul li {
+  margin: 1rem 0;
+}
+
+.nav-bar ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.nav-bar ul li a:hover {
+  background-color: #003399;
+}
+
+.nav-bar ul li a svg {
+  margin-right: 0.5rem;
+}
+
+.create-ticket-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.create-ticket-button:hover {
+  background-color: var(--secondary-color);
+}
+
+.toggle-nav-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toggle-nav-button:hover {
+  background-color: #003399;
+}
