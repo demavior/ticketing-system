@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/styles/Header.css';
-import UsersAPI from '../api/UserApi.js';
+import UsersAPI from '../api/UsersApi.js';
 import logo from '../assets/images/logo.png';
+import profileImage from '../assets/images/default.jpg';
 import Cookies from 'js-cookie';
+import { FaUser, FaCog, FaBuilding, FaSignOutAlt } from 'react-icons/fa';
 
 const UserHeader = ({ toggleNav }) => {
   const navigate = useNavigate();
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const tenant = Cookies.get('tenant');
+  const profileMenuRef = useRef(null);
 
   const handleProfileClick = () => {
     setProfileMenuOpen(!profileMenuOpen);
@@ -26,6 +29,24 @@ const UserHeader = ({ toggleNav }) => {
     }
   };
 
+  const handleClickOutside = (event) => {
+    if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+      setProfileMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (profileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [profileMenuOpen]);
+
   return (
     <header className="header">
       <div className="header-left">
@@ -39,14 +60,26 @@ const UserHeader = ({ toggleNav }) => {
         <input type="text" placeholder="Search..." className="search-bar" name="unique-search" autoComplete="off"/>
       </div>
       <div className="header-right">
-        <button className="profile-button" onClick={handleProfileClick}>
-          Profile
-        </button>
+        <img
+          src={profileImage}
+          alt="User Profile"
+          className="profile-image"
+          onClick={handleProfileClick}
+        />
         {profileMenuOpen && (
-          <div className="profile-menu">
-            <Link to="/user/profile" onClick={handleProfileClick}>Profile</Link>
-            <Link to="/user/settings" onClick={handleProfileClick}>Settings</Link>
-            <Link onClick={handleLogout}>Logout</Link>
+          <div className="profile-menu" ref={profileMenuRef}>
+            <Link to="/user/profile" onClick={handleProfileClick}>
+              <FaUser /> Profile
+            </Link>
+            <Link to="/user/workplace" onClick={handleProfileClick}>
+              <FaBuilding /> Workplace
+            </Link>
+            {/* <Link to="/user/settings" onClick={handleProfileClick}>
+              <FaCog /> Settings
+            </Link> */}
+            <Link onClick={handleLogout}>
+              <FaSignOutAlt /> Logout
+            </Link>
           </div>
         )}
       </div>
