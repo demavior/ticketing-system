@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import UsersAPI from '../api/UserApi.js';
-import '../assets/styles/UserProfile.css';
+import UsersAPI from '../api/UsersApi.js';
 
-const UserProfile = () => {
+function UserProfile() {
   const [user, setUser] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
@@ -17,7 +16,6 @@ const UserProfile = () => {
         console.error('Error fetching user data:', error);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -64,87 +62,89 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="user-profile-container">
-      <h2>User Profile</h2>
-      <div className="user-info">
-        <label>
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={user.username || ''}
-            onChange={handleInputChange}
-            disabled={true}
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={user.email || ''}
-            onChange={handleInputChange}
-            disabled={!editMode}
-          />
-        </label>
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="first_name"
-            value={user.first_name || ''}
-            onChange={handleInputChange}
-            disabled={!editMode}
-          />
-        </label>
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="last_name"
-            value={user.last_name || ''}
-            onChange={handleInputChange}
-            disabled={!editMode}
-          />
-        </label>
-        {editMode ? (
-          <button onClick={handleSave}>Save</button>
-        ) : (
-          <button onClick={() => setEditMode(true)}>Edit</button>
-        )}
-        <button onClick={handleChangeButton}>Change Password</button>
-      </div>
-      {changePasswordVisible && (
-      <div className="modal-backdrop">
-        <form autoComplete="off" id='modal-form'>
-          <div className="modal change-password">
-            <h3>Change Password</h3>
-            <label>
-              Current Password:
-              <input
-                type="password"
-                name="currentPassword"
-                value={passwords.currentPassword}
-                onChange={handlePasswordChange}
-              />
-            </label>
-            <label>
-              New Password:
-              <input
-                type="password"
-                name="newPassword"
-                value={passwords.newPassword}
-                onChange={handlePasswordChange}
-              />
-            </label>
-            <div className="modal-buttons">
-              <button className="cancel-button" onClick={handleCancelPassword}>Cancel</button>
-              <button onClick={handleChangePassword}>Continue</button>
+    <div className="main-content">
+      <div className="form-container">
+        <h2>User Profile</h2>
+        <div className="user-info">
+          <label>
+            Username:
+            <input
+              type="text"
+              name="username"
+              value={user.username || ''}
+              onChange={handleInputChange}
+              disabled={true}
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={user.email || ''}
+              onChange={handleInputChange}
+              disabled={!editMode}
+            />
+          </label>
+          <label>
+            First Name:
+            <input
+              type="text"
+              name="first_name"
+              value={user.first_name || ''}
+              onChange={handleInputChange}
+              disabled={!editMode}
+            />
+          </label>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              name="last_name"
+              value={user.last_name || ''}
+              onChange={handleInputChange}
+              disabled={!editMode}
+            />
+          </label>
+          {editMode ? (
+            <button onClick={handleSave}>Save</button>
+          ) : (
+            <button onClick={() => setEditMode(true)}>Edit</button>
+          )}
+          <button onClick={handleChangeButton}>Change Password</button>
+        </div>
+        {changePasswordVisible && (
+        <div className="modal-backdrop">
+          <form autoComplete="off" id='modal-form'>
+            <div className="modal change-password">
+              <h3>Change Password</h3>
+              <label>
+                Current Password:
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwords.currentPassword}
+                  onChange={handlePasswordChange}
+                />
+              </label>
+              <label>
+                New Password:
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwords.newPassword}
+                  onChange={handlePasswordChange}
+                />
+              </label>
+              <div className="modal-buttons">
+                <button className="cancel-button" onClick={handleCancelPassword}>Cancel</button>
+                <button onClick={handleChangePassword}>Continue</button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
+        )}
       </div>
-      )}
     </div>
   );
 };

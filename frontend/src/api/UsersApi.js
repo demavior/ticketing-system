@@ -62,6 +62,8 @@ const UsersAPI = {
 
   getCurrentUser: () => axios.get('users/current/'),
 
+  getCurrentTenant: () => axios.get('tenants/current/'),
+
   updateCurrentUser: (data) => axios.patch('users/current/', data),
 
   getUserById: (userId) => axios.get(`users/${userId}/`),

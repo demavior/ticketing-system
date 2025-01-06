@@ -59,15 +59,16 @@
 }
 
 .header-right {
+  display: flex;
+  align-items: center;
   position: relative;
 }
 
-.profile-button {
-  background: none;
-  border: none;
-  color: white;
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .profile-menu {
@@ -83,7 +84,8 @@
 }
 
 .profile-menu a {
-  display: block;
+  display: flex;
+  align-items: center;
   padding: 0.5rem;
   text-decoration: none;
   color: black;
@@ -91,6 +93,10 @@
 
 .profile-menu a:hover {
   background-color: #f0f0f0;
+}
+
+.profile-menu a svg {
+  margin-right: 0.5rem;
 }
 
 .header nav {
