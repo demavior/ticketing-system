@@ -10,8 +10,8 @@ function UserProfile() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await UsersAPI.getCurrentUser();
-        setUser(response.data);
+        const currentUser = await UsersAPI.getCurrentUser();
+        setUser(currentUser);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -31,9 +31,8 @@ function UserProfile() {
 
   const handleSave = async () => {
     try {
-      const response = await UsersAPI.updateCurrentUser(user);
+      await UsersAPI.updateCurrentUser(user);
       setEditMode(false);
-      console.log('User data updated:', response.data);
     } catch (error) {
       console.error('Error updating user data:', error);
     }

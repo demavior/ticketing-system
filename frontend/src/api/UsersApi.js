@@ -56,21 +56,21 @@ const UsersAPI = {
     }
   },
 
-  changePassword: (data) => axios.post('users/change-password/', data),
+  changePassword: async (data) => (await axios.post('users/change-password/', data)).data,
 
-  register: (data) => axios.post('users/register/', data),
+  register: async (data) => (await axios.post('users/register/', data)).data,
 
-  getCurrentUser: () => axios.get('users/current/'),
+  getCurrentUser: async () => (await axios.get('users/current/')).data,
 
-  getCurrentTenant: () => axios.get('tenants/current/'),
+  getCurrentTenant: async () => (await axios.get('tenants/current/')).data,
 
-  updateCurrentUser: (data) => axios.patch('users/current/', data),
+  updateCurrentUser: async (data) => (axios.patch('users/current/', data)).data,
 
-  getUserById: (userId) => axios.get(`users/${userId}/`),
+  getUserById: async (userId) => (await axios.get(`users/${userId}/`)).data,
 
-  updateUserById: (data, userId) => axios.patch(`users/${userId}/`, data),
+  updateUserById: async (data, userId) => (await axios.patch(`users/${userId}/`, data)).data,
 
-  getUsersList: () => axios.get('users/'),
+  getUsersList: async () => (await axios.get('users/')).data,
 
 };
 
