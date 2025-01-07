@@ -15,8 +15,8 @@ function UserWorkplace() {
   useEffect(() => {
     const fetchTenant = async () => {
       try {
-        const response = await UserAPI.getCurrentTenant();
-        setWorkplace(response.data);
+        const tenant = await UserAPI.getCurrentTenant();
+        setWorkplace(tenant);
         const tenantList = await UserAPI.getUserTenants(username);
         setTenants(tenantList);
       } catch (err) {
