@@ -53,7 +53,9 @@ const UserHeader = ({ toggleNav }) => {
         <button className="menu-button" onClick={toggleNav}>
           &#9776;
         </button>
-        <img src={logo} alt="Pharos Support Logo" className="logo" />
+        <Link to="/" className="logo-container">
+          <img src={logo} alt="Pharos Support Logo" className="logo" />
+        </Link>
         <span className="tenant-name">{tenant.toUpperCase()}</span>
       </div>
       <div className="header-middle">
