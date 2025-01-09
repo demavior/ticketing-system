@@ -81,6 +81,7 @@ textarea {
 /* Ticket properties */
 .ticket-properties {
   width: 25%;
+  min-width: 200px;
   padding: 1rem;
   background-color: white;
   border-radius: 10px;
@@ -119,4 +120,20 @@ textarea {
   border-radius: 5px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
+}
+
+@media (max-width: 480px) {
+  .ticket-details-container {
+    flex-direction: column;
+  }
+
+  .ticket-properties {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .ticket-main {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
 }

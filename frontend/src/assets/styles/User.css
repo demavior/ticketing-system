@@ -2,6 +2,7 @@
   flex-grow: 1;
   transition: margin-left 0.3s ease;
   position: absolute;
+  top: 60px;
 }
 .user-home {
   display: flex;
