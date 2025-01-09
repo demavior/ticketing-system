@@ -6,6 +6,26 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = '__all__'
 
+    created_by = serializers.SerializerMethodField()
+    user_email = serializers.SerializerMethodField()
+    tenant = serializers.SerializerMethodField()
+    tenant_phone = serializers.SerializerMethodField()
+    priority_name = serializers.SerializerMethodField()
+    assigned_to_name = serializers.SerializerMethodField()
+
+    def get_tenant(self, obj):
+        return obj.tenant.name if obj.tenant else None
+    def get_created_by(self, obj):
+        return obj.created_by.first_name + ' ' + obj.created_by.last_name if obj.created_by else None
+    def get_user_email(self, obj):
+        return obj.created_by.email if obj.created_by else None
+    def get_tenant_phone(self, obj):
+        return obj.tenant.phone_number if obj.tenant else None
+    def get_priority_name(self, obj):
+        return obj.get_priority_display()
+    def get_assigned_to_name(self, obj):
+        return obj.assigned_to.first_name + ' ' + obj.assigned_to.last_name if obj.assigned_to else None
+
 class TicketCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketComment

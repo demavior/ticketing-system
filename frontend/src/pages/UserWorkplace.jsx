@@ -33,7 +33,7 @@ function UserWorkplace() {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-container">
       <div className="form-container">
         <h2>Workplace</h2>
         {tenants.length > 1 && false && (

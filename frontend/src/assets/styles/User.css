@@ -1,13 +1,21 @@
-.main-content {
+.main-container {
   flex-grow: 1;
-  padding: 2rem;
   transition: margin-left 0.3s ease;
+  position: absolute;
+}
+.user-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
 }
 
-.open + .main-content {
-  margin-left: 200px;
+.open + .main-container {
+  left: 200px;
+  width: calc(100% - 200px);
 }
 
-.collapsed + .main-content {
-  margin-left: 54px;
+.collapsed + .main-container {
+  left: 54px;
+  width: calc(100% - 54px);
 }

@@ -11,6 +11,7 @@ import UserProfile from './pages/UserProfile';
 import UserWorkplace from './pages/UserWorkplace';
 import Tickets from './pages/Tickets';
 import TicketsNew from './pages/TicketsNew';
+import TicketDetails from './pages/TicketDetails';
 import NotFound from './pages/NotFound';
 
 function getUserCookie() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/user/workplace" element={<UserWorkplace />} />
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/tickets/new" element={<TicketsNew />} />
+        <Route path="/tickets/:ticketId" element={<TicketDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

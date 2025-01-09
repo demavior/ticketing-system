@@ -54,7 +54,7 @@ function Tickets() {
   });
 
   return (
-    <div className="main-content">
+    <div className="main-container">
       <div className="tickets-container">
         <h2>Tickets</h2>
         {error && <p className="error-message">{error}</p>}
@@ -62,7 +62,7 @@ function Tickets() {
           <button onClick={handleAddTicket}>Add Ticket</button>
           <label>
             Status:
-            <select name="status" value={filters.status} onChange={handleFilterChange}>
+            <select name="status" value={filters.status.toLocaleUpperCase()} onChange={handleFilterChange}>
               <option value="">All</option>
               <option value="open">Open</option>
               <option value="in-progress">In Progress</option>
@@ -71,7 +71,7 @@ function Tickets() {
           </label>
           <label>
             Priority:
-            <select name="priority" value={filters.priority} onChange={handleFilterChange}>
+            <select name="priority" value={filters.priority_name} onChange={handleFilterChange}>
               <option value="">All</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -100,10 +100,10 @@ function Tickets() {
                 <td>
                   <Link to={`/tickets/${ticket.id}`}>{ticket.title}</Link>
                 </td>
-                <td>{ticket.status}</td>
-                <td>{ticket.priority}</td>
-                <td>{ticket.assigned_to}</td>
-                <td>{ticket.due_date}</td>
+                <td>{ticket.status.toLocaleUpperCase()}</td>
+                <td>{ticket.priority_name}</td>
+                <td>{ticket.assigned_to_name}</td>
+                <td>{ticket.due_date ? new Date(ticket.due_date).toLocaleDateString() : ''} </td>
                 <td>{new Date(ticket.created_at).toLocaleDateString()}</td>
               </tr>
             ))}
