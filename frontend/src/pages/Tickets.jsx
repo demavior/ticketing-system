@@ -54,7 +54,7 @@ function Tickets() {
   });
 
   return (
-    <div className="main-content">
+    <div className="main-container">
       <div className="tickets-container">
         <h2>Tickets</h2>
         {error && <p className="error-message">{error}</p>}

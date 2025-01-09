@@ -61,7 +61,7 @@ function UserProfile() {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-container">
       <div className="form-container">
         <h2>User Profile</h2>
         <div className="user-info">

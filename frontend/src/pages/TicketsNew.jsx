@@ -45,7 +45,7 @@ function TicketsNew() {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-container">
       <div className="form-container">
         <h2>Create New Ticket</h2>
         {error && <p className="error-message">{error}</p>}

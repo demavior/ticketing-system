@@ -8,11 +8,13 @@ function UserHome() {
   const username = Cookies.get('username');
 
   return (
-      <div className='main-content'>
+    <div className='main-container'>
+      <div className='user-home'>
         <h1>{`Welcome, ${username}`}</h1>
         <p>Here is a summary of your tickets and dashboard.</p>
         {/* Placeholder for ticket summary and dashboard widgets */}
       </div>
+    </div>
   );
 };
 
