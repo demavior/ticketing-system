@@ -1,7 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import TicketsAPI from '../api/TicketsApi.js';
 
 function TicketMain({ ticket }) {
   const [activeTab, setActiveTab] = useState('details');
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+
+  const fetchComments = async () => {
+    try {
+      const comments = await TicketsAPI.getComments(ticket.id);
+      setComments(comments);
+    } catch (error) {
+      console.error('Error getting comments:', error);
+    }
+  };
+
+  const addComment = async () => {
+    try {
+      const data = { comment: newComment };
+      const comment = await TicketsAPI.createComment(ticket.id, data);
+      setComments((prevComments) => [...prevComments, comment]);
+      setNewComment('');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  } , [ticket.id]);
 
   return (
     <div className="ticket-main">
@@ -20,14 +47,28 @@ function TicketMain({ ticket }) {
       </div>
       {activeTab === 'details' && (
         <div className="tab-content">
-          <div className="ticket-description">
-            <h3>Description</h3>
-            <p>{ticket.description}</p>
-            <h3>Comments</h3>
-            {/* Render comments here */}
+          <div className="ticket-details">
+            <div className='ticket-description'>
+              <h3>Description</h3>
+              <p>{ticket.description}</p>
+            </div>
+            <div>
+              <ul>
+                {comments.map((comment) => (
+                  <li key={comment.id} className="ticket-description">
+                    <div className="comment-header">
+                      <span className="comment-author">{comment.author}</span>
+                      <span className="comment-date">{new Date(comment.created_at).toLocaleString()}</span>
+                    </div>
+                    <p>{comment.comment}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <div className="ticket-comment">
-            <textarea placeholder="Add a comment..."></textarea>
+            <textarea placeholder="Add a comment..." value={newComment} onChange={(e) => setNewComment(e.target.value)}></textarea>
+            <button onClick={addComment}>Send</button>
           </div>
         </div>
       )}

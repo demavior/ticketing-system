@@ -61,6 +61,77 @@ const TicketsAPI = {
       return [];
     }
   },
+
+  getComments: async (ticketId) => {
+    try {
+      const response = await axios.get(`tickets/${ticketId}/comments/`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting comments:', error);
+      return [];
+    }
+  },
+
+  createComment: async (ticketId, data) => {
+    try {
+      const response = await axios.post(`tickets/${ticketId}/comments/`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating comment:', error);
+      return {};
+    }
+  },
+
+  updateComment: async (ticketId, commentId, data) => {
+    try {
+      const response = await axios.patch(`tickets/${ticketId}/comments/${commentId}/`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      return {};
+    }
+  },
+
+  deleteComment: async (ticketId, commentId) => {
+    try {
+      const response = await axios.delete(`tickets/${ticketId}/comments/${commentId}/`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      return {};
+    }
+  },
+
+  getTasks: async (ticketId) => {
+    try {
+      const response = await axios.get(`tickets/${ticketId}/tasks/`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting tasks:', error);
+      return [];
+    }
+  },
+
+  createTask: async (ticketId, data) => {
+    try {
+      const response = await axios.post(`tickets/${ticketId}/tasks/`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating task:', error);
+      return {};
+    }
+  },
+
+  updateTask: async (ticketId, taskId, data) => {
+    try {
+      const response = await axios.patch(`tickets/${ticketId}/tasks/${taskId}/`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating task:', error);
+      return {};
+    }
+  },
+  
 };
 
 export default TicketsAPI;
