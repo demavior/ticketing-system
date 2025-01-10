@@ -159,7 +159,7 @@ class TicketCommentView(APIView):
             serializer = TicketCommentSerializer(comment)
             return Response(serializer.data)
         elif ticket_id:
-            comments = TicketComment.objects.filter(ticket=ticket_id)
+            comments = TicketComment.objects.filter(ticket=ticket_id).order_by('created_at')
             serializer = TicketCommentSerializer(comments, many=True)
             return Response(serializer.data)
         else:
