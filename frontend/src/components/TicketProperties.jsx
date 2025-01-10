@@ -63,7 +63,7 @@ function TicketProperties({ ticket }) {
       <div className="property-group">
         <h4>Contact Info</h4>
         <div className="property">
-          <p>{ticketDetails.created_by}</p>
+          <p>{ticketDetails.requester}</p>
           <p style={{fontSize:"0.8rem"}}>{ticketDetails.user_email}</p>
           <p>{ticketDetails.tenant}</p>
           <p style={{fontSize:"0.8rem"}}>{formatPhoneNumber(ticketDetails.tenant_phone)}</p>
