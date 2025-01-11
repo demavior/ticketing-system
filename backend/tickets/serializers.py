@@ -50,6 +50,15 @@ class TicketTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketTask
         fields = '__all__'
+    
+    assigned_name = serializers.SerializerMethodField()
+    type_name = serializers.SerializerMethodField()
+
+    def get_assigned_name(self, obj):
+        return obj.assigned_to.first_name + ' ' + obj.assigned_to.last_name if obj.assigned_to else None
+    def get_type_name(self, obj):
+        return obj.type.name if obj.type else None
+    
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

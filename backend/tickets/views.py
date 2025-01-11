@@ -125,7 +125,7 @@ class CategoryView(APIView):
 class TaskTypeView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk):
+    def get(self, request, pk=None):
         if pk:
             task_type = TaskType.objects.get(pk=pk)
             serializer = TaskTypeSerializer(task_type)
