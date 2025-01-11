@@ -3,6 +3,7 @@ from users.models import CustomUser
 from tenants.models import Tenant
 from .mixins import SequenceNumberMixin
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Ticket(models.Model, SequenceNumberMixin):
     STATUS_CHOICES = [('pending','Pending'),
@@ -112,10 +113,10 @@ class TicketTask(models.Model, SequenceNumberMixin):
     number = models.IntegerField(editable=False)
     assigned_to = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='assigned_tasks', null=True, blank=True)
     type = models.ForeignKey(TaskType, on_delete=models.RESTRICT, related_name='tasks', null=True, blank=True)
-    task = models.TextField()
-    dateTime = models.DateTimeField(null=True, blank=True)
-    hours_worked = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    minutes_worked = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    date_worked = models.DateTimeField(null=True, blank=True)
+    hours_worked = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(23)], null=True, blank=True)
+    minutes_worked = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(59)], null=True, blank=True)
+    comment = models.TextField()
     created_by = models.ForeignKey(CustomUser, on_delete=models.RESTRICT, related_name='ticket_tasks')
     created_at = models.DateTimeField(auto_now_add=True)
     
