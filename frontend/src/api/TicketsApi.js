@@ -122,15 +122,35 @@ const TicketsAPI = {
     }
   },
 
-  updateTask: async (ticketId, taskId, data) => {
+  updateTask: async (taskId, data) => {
     try {
-      const response = await axios.patch(`tickets/${ticketId}/tasks/${taskId}/`, data);
+      const response = await axios.patch(`tickets/tasks/${taskId}/`, data);
       return response.data;
     } catch (error) {
       console.error('Error updating task:', error);
       return {};
     }
   },
+
+  deleteTask: async (ticketId, taskId) => {
+    try {
+      const response = await axios.delete(`tickets/${ticketId}/tasks/${taskId}/`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      return {};
+    }
+  },
+
+  getTaskTypes: async () => {
+    try {
+      const response = await axios.get('tickets/task-types/');
+      return response.data;
+    } catch (error) {
+      console.error('Error getting task types:', error);
+      return [];
+    }
+  }
   
 };
 

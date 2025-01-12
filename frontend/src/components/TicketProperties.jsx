@@ -24,7 +24,6 @@ function TicketProperties({ ticket }) {
     const fetchCategories = async () => {
       try {
         const categories = await TicketsAPI.getCategories();
-        console.log(categories);
         setCategories(categories);
         setLoadingCategories(false);
       } catch (err) {
@@ -35,7 +34,6 @@ function TicketProperties({ ticket }) {
     const fetchAgents = async () => {
       try {
         const users = await UsersAPI.getUsersList();
-        console.log(users);
         setAgents(users);
         setLoadingAgents(false);
       } catch (err) {

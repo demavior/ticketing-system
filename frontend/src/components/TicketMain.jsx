@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import TicketsAPI from '../api/TicketsApi.js';
+import TicketTasks from '../components/TicketTasks';
 
 function TicketMain({ ticket }) {
   const [activeTab, setActiveTab] = useState('details');
@@ -72,8 +73,7 @@ function TicketMain({ ticket }) {
           </div>
         </div>
       )}
-      {/* Placeholder for other tabs */}
-      {activeTab === 'tasks' && <div className="tab-content">Tasks content</div>}
+      {activeTab === 'tasks' && <div className="tab-content"><TicketTasks ticketId={ticket.id} /></div>}
       {activeTab === 'attachments' && <div className="tab-content">Attachments content</div>}
       {activeTab === 'history' && <div className="tab-content">History content</div>}
     </div>
