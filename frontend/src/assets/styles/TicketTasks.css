@@ -1,0 +1,73 @@
+.ticket-tasks {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.ticket-tasks table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: small;
+}
+
+.ticket-tasks th, .ticket-tasks td {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+.ticket-tasks th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.ticket-tasks tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ticket-tasks tr:hover {
+  background-color: #f1f1f1;
+}
+
+.ticket-tasks input, .ticket-tasks select {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ticket-tasks input[type="numeric"] {
+  width: 30px;
+}
+.ticket-tasks input[type="date"] {
+  width: 120px;
+}
+
+.ticket-tasks button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.ticket-tasks button:hover {
+  color: #0056b3;
+}
+
+.ticket-tasks .cancel-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ticket-tasks .cancel-button:hover {
+  background-color: #0056b3;
+  color:white
+}
+
+.ticket-tasks .div-cancel {
+  display: flex;
+  justify-content: flex-end;
+}
