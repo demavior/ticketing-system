@@ -48,15 +48,15 @@ function TicketTasks({ ticketId }) {
 
   const addTask = async () => {
     try {
-      console.log(newTask);
-      await TicketsAPI.createTask(ticketId, newTask);
+      const filteredTask = Object.fromEntries(Object.entries(newTask).filter(([_, v]) => v != null && v !== ''));
+      await TicketsAPI.createTask(ticketId, filteredTask);
       setNewTask({
-        comment: '',
+        assigned_to: '',
         type: '',
         date_worked: '',
-        assigned_to: '',
         hours_worked: '',
-        minutes_worked: ''
+        minutes_worked: '',
+        comment: ''
       });
       fetchTasks();
     } catch (error) {
@@ -152,7 +152,12 @@ function TicketTasks({ ticketId }) {
                 <>
                   <td>{task.assigned_name}</td>
                   <td>{task.type_name}</td>
-                  <td>{task.date_worked ? new Date(task.date_worked).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : ''}</td>
+                  <td>
+                    {task.date_worked ? (() => {
+                      const [year, month, day] = task.date_worked.split('T')[0].split('-');
+                      return `${month}/${day}/${year}`;
+                    })() : ''}
+                  </td>
                   <td>{task.hours_worked}</td>
                   <td>{task.minutes_worked}</td>
                   <td>{task.comment}</td>
