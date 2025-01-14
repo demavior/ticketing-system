@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import UserAPI from '../api/UsersApi.js';
+import TenantAPI from '../api/TenantsApi.js';
 import '../assets/styles/UserWorkplace.css';
 
 function UserWorkplace() {
@@ -10,14 +10,13 @@ function UserWorkplace() {
   const [selectWorkplaceVisible, setSelectWorkplaceVisible] = useState(false);
 
   const role = Cookies.get('role');
-  const username = Cookies.get('username');
 
   useEffect(() => {
     const fetchTenant = async () => {
       try {
-        const tenant = await UserAPI.getCurrentTenant();
+        const tenant = await TenantAPI.getCurrentTenant();
         setWorkplace(tenant);
-        const tenantList = await UserAPI.getUserTenants(username);
+        const tenantList = await TenantAPI.getTenants();
         setTenants(tenantList);
       } catch (err) {
         setError('Failed to fetch workplace data.');
