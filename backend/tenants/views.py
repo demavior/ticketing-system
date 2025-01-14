@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Tenant
-from .serializers import TenantSerializer
+from users.models import CustomUser
+from .serializers import TenantSerializer, UserTenantsSerializer
 
 class TenantView(APIView):
     permission_classes = [IsAuthenticated]
@@ -20,3 +21,15 @@ class TenantView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class UserTenantsView(APIView):
+    def get(self, request):
+        try:
+            # Ge all Tenants by user id
+            user = request.user
+            tenants = user.tenants.all()
+            serializer = UserTenantsSerializer(tenants, many=True)
+            return Response(serializer.data)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
