@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import TicketsAPI from '../api/TicketsApi.js';
 import '../assets/styles/Tickets.css';
+import Cookies from 'js-cookie';
 
 function Tickets() {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ function Tickets() {
   const [filters, setFilters] = useState({ status: '', priority: '' });
   const [sortConfig, setSortConfig] = useState({ key: 'number', direction: 'ascending' });
   const [error, setError] = useState('');
+  const role = Cookies.get('role');
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -82,6 +84,9 @@ function Tickets() {
         <table className="tickets-table">
           <thead>
             <tr>
+              {['agent', 'admin'].includes(role) && (
+              <th onClick={() => handleSort('tenant')}>Tenant</th>
+              )}
               <th onClick={() => handleSort('number')}>#</th>
               <th onClick={() => handleSort('title')}>Title</th>
               <th onClick={() => handleSort('status')}>Status</th>
@@ -94,6 +99,9 @@ function Tickets() {
           <tbody>
             {sortedTickets.map((ticket) => (
               <tr key={ticket.id}>
+                {['agent', 'admin'].includes(role) && (
+                  <td>{ticket.tenant}</td>
+                )}
                 <td>
                   <Link to={`/tickets/${ticket.id}`}>{ticket.number}</Link>
                 </td>
