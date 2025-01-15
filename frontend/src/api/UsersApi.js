@@ -15,12 +15,12 @@ const UsersAPI = {
         }
       }
       // Call the login API
-      const response = await axios.post('users/login/', data);
+      const login = (await axios.post('users/login/', data)).data;
       // Set cookies
-      Cookies.set('token', response.data.token, { expires: 7 });
+      Cookies.set('token', login.token, { expires: 7 });
       Cookies.set('username', data.username, { expires: 7 });
-      Cookies.set('tenant', response.data.tenant, { expires: 7 });
-      Cookies.set('role', data.role, { expires: 7 });
+      Cookies.set('tenant', login.tenant, { expires: 7 });
+      Cookies.set('role', login.role, { expires: 7 });
       console.log('Cookies set:', Cookies.get());
       return { success: true };
     } catch (error) {
