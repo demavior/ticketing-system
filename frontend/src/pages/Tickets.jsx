@@ -85,7 +85,7 @@ function Tickets() {
           <thead>
             <tr>
               {['agent', 'admin'].includes(role) && (
-              <th onClick={() => handleSort('tenant')}>Tenant</th>
+              <th onClick={() => handleSort('tenant_name')}>Tenant</th>
               )}
               <th onClick={() => handleSort('number')}>#</th>
               <th onClick={() => handleSort('title')}>Title</th>
@@ -100,7 +100,7 @@ function Tickets() {
             {sortedTickets.map((ticket) => (
               <tr key={ticket.id}>
                 {['agent', 'admin'].includes(role) && (
-                  <td>{ticket.tenant}</td>
+                  <td>{ticket.tenant_name}</td>
                 )}
                 <td>
                   <Link to={`/tickets/${ticket.id}`}>{ticket.number}</Link>

@@ -8,12 +8,12 @@ class TicketSerializer(serializers.ModelSerializer):
 
     requester = serializers.SerializerMethodField()
     user_email = serializers.SerializerMethodField()
-    tenant = serializers.SerializerMethodField()
+    tenant_name = serializers.SerializerMethodField()
     tenant_phone = serializers.SerializerMethodField()
     priority_name = serializers.SerializerMethodField()
     assigned_to_name = serializers.SerializerMethodField()
 
-    def get_tenant(self, obj):
+    def get_tenant_name(self, obj):
         return obj.tenant.name if obj.tenant else None
     def get_requester(self, obj):
         return obj.created_by.first_name + ' ' + obj.created_by.last_name if obj.created_by else None

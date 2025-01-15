@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from users.models import CustomUser
 from .models import Ticket, TicketTask, TicketComment, TicketAttachment, Category, TaskType
 from .serializers import (TicketSerializer, TicketTaskSerializer, TicketCommentSerializer, TaskTypeSerializer,
                           TicketAttachmentSerializer, CategorySerializer)
@@ -10,7 +11,12 @@ class TicketListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        tickets = Ticket.objects.filter(tenant=request.tenant)
+        role = CustomUser.objects.get(id=request.user.id).role
+        if role == 'admin':
+            tenants = request.user.tenants.all()
+            tickets = Ticket.objects.filter(tenant__in=tenants)
+        else:
+            tickets = Ticket.objects.filter(tenant=request.tenant)
         serializer = TicketSerializer(tickets, many=True)
         return Response(serializer.data)
 
