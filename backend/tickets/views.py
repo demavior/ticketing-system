@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from users.models import CustomUser
 from .models import Ticket, TicketTask, TicketComment, TicketAttachment, Category, TaskType
 from .serializers import (TicketSerializer, TicketTaskSerializer, TicketCommentSerializer, TaskTypeSerializer,
                           TicketAttachmentSerializer, CategorySerializer)
@@ -10,7 +11,18 @@ class TicketListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        tickets = Ticket.objects.filter(tenant=request.tenant)
+        role = CustomUser.objects.get(id=request.user.id).role
+        # Check the role of the user and filter tickets accordingly
+        if role == 'agent' or role == 'admin':
+            # Agents and Admins can see tickets for all tenants they are associated with
+            tenants = request.user.tenants.all()
+            tickets = Ticket.objects.filter(tenant__in=tenants)
+        elif role == 'supervisor':
+            # Supervisors can see tickets for their specific tenant logged in
+            tickets = Ticket.objects.filter(tenant=request.tenant)
+        else:
+            # Other users can only see tickets they created in the tenant logged in
+            tickets = Ticket.objects.filter(created_by=request.user, tenant=request.tenant)
         serializer = TicketSerializer(tickets, many=True)
         return Response(serializer.data)
 
@@ -29,7 +41,8 @@ class TicketDetailView(APIView):
 
     def get(self, request, pk):
         try:
-            ticket = Ticket.objects.get(pk=pk, tenant=self.request.tenant)
+            tenants = request.user.tenants.all()
+            ticket = Ticket.objects.get(pk=pk, tenant__in=tenants)
             serializer = TicketSerializer(ticket)
             return Response(serializer.data)
         except Ticket.DoesNotExist:
